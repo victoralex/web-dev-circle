@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Title</title>
+	<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+</head>
+<body>
+<style type="text/css">
+	
+		html,body
+		{
+			margin: 0px;
+			padding: 0px;
+			height: 100%;
+			text-align: center;
+		}
+
+		.screensContainer
+		{
+			display: inline-block;
+			width: 400px;
+			position: relative;
+			top: 50%;
+			margin-top: -180px;
+		}
+
+		.screensContainer .screen
+		{
+			background-color: #ddd;
+			width: 100%;
+			height: 100px;
+			margin-top: 10px;
+			margin-bottom: 10px;
+		}
+
+
+@keyframes bounceInDown {
+  from, 60%, 75%, 90%, to {
+    animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+  }
+
+  0% {
+    opacity: 0;
+    transform: translate3d(0, -3000px, 0);
+  }
+
+  60% {
+    opacity: 1;
+    transform: translate3d(0, 25px, 0);
+  }
+
+  75% {
+    transform: translate3d(0, -10px, 0);
+  }
+
+  90% {
+    transform: translate3d(0, 5px, 0);
+  }
+
+  to {
+    transform: none;
+  }
+}
+
+.bounceInDown {
+  animation-duration: 1s;
+  animation-fill-mode: both;
+  animation-name: bounceInDown;
+}
+
+.animationDelay1 {
+  animation-delay: 1s;
+}
+
+.animationDelay2 {
+  animation-delay: 2s;
+}
+
+.animationDelay3 {
+  animation-delay: 3s;
+}
+
+.animationDelay4 {
+  animation-delay: 4s;
+}
+
+</style>
+	<label for="company">Companie</label>
+	<input type="text" name="company" id="getCompany" onblur="doStuff()">
+	<div class="screensContainer"></div>
+<script type="text/javascript">
+	var companyInputObj = document.querySelector('#getCompany');
+	function doStuff(){
+		var $screensContainer = document.querySelector('.screensContainer');
+		$.ajax({
+		  url: "/stock/"+companyInputObj.value,
+		  type:"GET"
+		}).done(function(resp) {
+		  console.log(resp);
+		  var delays = ['animationDelay1', 'animationDelay2', 'animationDelay3', 'animationDelay4'].sort(function() {
+		    return 0.5 - Math.random();
+		  });
+		  var newScreen = document.createElement('div');
+		        newScreen.classList.add("screen");
+		        newScreen.classList.add("bounceInDown");
+		        
+		        newScreen.classList.add(delays.pop());
+		       
+		        $screensContainer.appendChild(newScreen);
+		        newScreen.innerHTML = resp.name + ' ' + resp.price + ' ' ;
+		});
+	}
+</script>
+</body>
+</html>

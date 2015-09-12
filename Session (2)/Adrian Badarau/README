@@ -1,0 +1,1 @@
+Run the server via `nodejs server.js` and then go to http://localhost:3000/index.html to see cards with quotes appearing once the server request for a stock quote is done
