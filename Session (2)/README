@@ -1,0 +1,1 @@
+Run the server via `nodejs bvb.js bnet` and then go to http://localhost:3000/quote to see the latest stock quote for Bittnet Systems on AeRO
