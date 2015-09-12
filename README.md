@@ -1,5 +1,7 @@
 # web-dev-circle
-All samples from the weekly web development classes
+10 participants, 10 beanbags, 3 hours, 20% theory, 80% practice, all web standards + best practices. Bring a laptop and Sublime Editor. The class is free and (sometimes) the coffee is on the house :)
+
+All files in this repo are from the weekly classes
 
 ## Guidelines
 - On each folder run `npm install`
