@@ -1,0 +1,8 @@
+{
+  "name": "Web-Dev-Circle-(2)",
+  "version": "1.0.0",
+  "devDependencies": {
+    "xml2js": "^0.4.12",
+    "express": "^4.13.3"
+  }
+}
