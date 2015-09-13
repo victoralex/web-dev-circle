@@ -1,0 +1,26 @@
+
+html, body
+{
+	margin: 0px;
+	padding: 0px;
+	height: 100%;
+	text-align: center;
+}
+
+.screensContainer
+{
+	display: inline-block;
+	width: 400px;
+	position: relative;
+	top: 50%;
+	margin-top: -180px;
+}
+
+.screensContainer .screen
+{
+	background-color: #ddd;
+	width: 100%;
+	height: 100px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
