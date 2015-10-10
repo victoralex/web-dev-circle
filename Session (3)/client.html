@@ -9,7 +9,7 @@
 
 	<script type="text/javascript">
 
-		var	trackerIP = '192.168.105.40',
+		var	trackerIP = '192.168.105.107',
 			peer = new Peer(
 				'victor',
 				{
@@ -34,7 +34,7 @@
 				{
 					console.log( "--PeerJS-- active connected to", peerID );
 
-					conn.send( "I've connected to you" );
+					//conn.send( "I've connected to you" );
 
 					onOpen();
 				});
@@ -105,8 +105,6 @@
 		peer.on('connection', function( conn )
 		{
 			console.log( "--PeerJS-- passive connected to", conn.peer );
-
-			conn.send( 'hi!' );
 
 			conn.on( 'data', function( data )
 			{
