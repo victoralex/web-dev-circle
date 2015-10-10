@@ -73,7 +73,7 @@
 				}
 
 				// hack into the local received commands
-				Zone._handleUpdate( message );
+				Zone._handleUpdate( message, null );
 			},
 
 			_sendMyCharacterDataTo: function( peerObject )
@@ -81,19 +81,26 @@
 				peerObject.send( { cid: peer.id, c: "newCharacter" } );
 			},
 
-			_handleUpdate: function( updateCommand )
+			_handleUpdate: function( updateCommand, sourcePeer )
 			{
-				console.log( "Update Received", updateCommand );
-
 				switch( updateCommand.c )
 				{
 					case "newCharacter":
 
+						console.log( "--Zone-- New Character", updateCommand.cid );
+
 						new Character( updateCommand.cid );
+
+						if( sourcePeer )
+						{
+							Zone._sendMyCharacterDataTo( sourcePeer );
+						}
 
 					break;
 					case "move":
 
+						console.log( "--Zone-- Move", updateCommand.cid, updateCommand.d );
+						
 						Zone.characters[ updateCommand.cid ].moveInLayout( updateCommand.d.x, updateCommand.d.y );
 
 					break;
@@ -120,7 +127,7 @@
 				//console.log( "--PeerJS-- Received", conn, data );
 				console.log( "--PeerJS-- Received from " + conn.peer, data );
 
-				Zone._handleUpdate( data );
+				Zone._handleUpdate( data, conn );
 			});
 		}
 
