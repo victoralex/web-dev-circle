@@ -45,6 +45,13 @@
 				Zone.broadcast( { cid: _self.cid, c: "move", d: { x: x, y: y } } );
 			}
 
+			this.remove = function()
+			{
+				delete Zone.characters[ this.cid ];
+
+				this.domObject.parentNode.removeChild( this.domObject );
+			}
+
 			// initialize
 
 			Zone.characters[ this.cid ] = this;
@@ -162,8 +169,8 @@
 
 				conn.on( 'close', function()
 				{
-					delete Zone.characters[ peerID ];
-					
+					Zone.characters[ peerID ].remove();
+
 					console.log( "--PeerJS-- active disconnected", peerID );
 				});
 
