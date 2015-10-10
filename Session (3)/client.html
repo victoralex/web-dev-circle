@@ -254,6 +254,13 @@
 		{
 			console.log( "--PeerJS-- passive connected to", conn.peer );
 
+			conn.on( "close", function()
+			{
+				Zone.characters[ conn.peer ].remove();
+
+				console.log( "--PeerJS-- passive disconnected", conn.peer );
+			});
+
 			_handleData( conn );
 		});
 
