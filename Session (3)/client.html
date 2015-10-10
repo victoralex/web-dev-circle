@@ -27,6 +27,22 @@
 			});
 		}
 
+		var _broadcast = function( message )
+		{
+			for( var i in peer.connections )
+			{
+				peer.connections[ i ].forEach( function( connection )
+				{
+					if( !connection.open )
+					{
+						return;
+					}
+
+					connection.send( message );
+				})
+			}
+		}
+
 		//
 		// Handle the connection with the tracker
 		//
@@ -119,7 +135,7 @@
 		// Handle incoming connections from other peers
 		//
 
-		peer.on('connection', function( conn )
+		peer.on( 'connection', function( conn )
 		{
 			console.log( "--PeerJS-- passive connected to", conn.peer );
 
