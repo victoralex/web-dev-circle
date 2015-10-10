@@ -4,10 +4,105 @@
 
 	<script src="peerjs/dist/peer.min.js"></script>
 	<script src="jquery/dist/jquery.min.js"></script>
+
+	<style media="all">
+
+		.character
+		{
+			position: absolute;
+			width: 100px;
+			height: 100px;
+			background-color: #9f9f9f;
+		}
+
+	</style>
+
 </head>
 <body>
 
 	<script type="text/javascript">
+
+		var Character = function( characterID )
+		{
+			var _self = this;
+
+			this.x = null;
+			this.y = null;
+			this.cid = characterID;
+			this.domObject = document.createElement( "div" );
+
+			this.moveInLayout = function( x, y )
+			{
+				_self.x = x;
+				_self.y = y;
+
+				_self.domObject.style.left = _self.x + "px";
+				_self.domObject.style.top = _self.y + "px";
+			}
+
+			this.moveInNetwork = function( x, y )
+			{
+				Zone.broadcast( { cid: _self.cid, c: "move", d: { x: x, y: y } } );
+			}
+
+			// initialize
+
+			Zone.characters[ this.cid ] = this;
+
+			this.domObject.className = "character";
+			document.body.appendChild( this.domObject );
+		}
+
+		var Zone = {
+
+			characters: {},
+
+			broadcast: function( message )
+			{
+				for( var i in peer.connections )
+				{
+					peer.connections[ i ].forEach( function( connection )
+					{
+						if( !connection.open )
+						{
+							return;
+						}
+
+						connection.send( message );
+					})
+				}
+
+				// hack into the local received commands
+				Zone._handleUpdate( message );
+			},
+
+			_sendMyCharacterDataTo: function( peerObject )
+			{
+				peerObject.send( { cid: peer.id, c: "newCharacter" } );
+			},
+
+			_handleUpdate: function( updateCommand )
+			{
+				console.log( "Update Received", updateCommand );
+
+				switch( updateCommand.c )
+				{
+					case "newCharacter":
+
+						new Character( updateCommand.cid );
+
+					break;
+					case "move":
+
+						Zone.characters[ updateCommand.cid ].moveInLayout( updateCommand.d.x, updateCommand.d.y );
+
+					break;
+					default:
+
+						console.error( "--Zone-- Unknown command", updateCommand );
+				}
+			}
+		}
 
 		var	trackerIP = '192.168.105.107',
 			peer = new Peer(
@@ -24,23 +119,9 @@
 				// Will print 'hi!'
 				//console.log( "--PeerJS-- Received", conn, data );
 				console.log( "--PeerJS-- Received from " + conn.peer, data );
+
+				Zone._handleUpdate( data );
 			});
-		}
-
-		var _broadcast = function( message )
-		{
-			for( var i in peer.connections )
-			{
-				peer.connections[ i ].forEach( function( connection )
-				{
-					if( !connection.open )
-					{
-						return;
-					}
-
-					connection.send( message );
-				})
-			}
 		}
 
 		//
@@ -60,7 +141,8 @@
 				{
 					console.log( "--PeerJS-- active connected to", peerID );
 
-					//conn.send( "I've connected to you" );
+					// add my own character
+					Zone._sendMyCharacterDataTo( conn );
 
 					onOpen();
 				});
@@ -150,6 +232,12 @@
 		{
 			console.error( "--PeerJS-- Oops" );
 		});
+
+		//
+		// Initialize my character
+		//
+
+		new Character( peer.id );
 
 	</script>
 
