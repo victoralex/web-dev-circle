@@ -131,8 +131,7 @@
 			conn.on( 'data', function( data )
 			{
 				// Will print 'hi!'
-				//console.log( "--PeerJS-- Received", conn, data );
-				console.log( "--PeerJS-- Received from " + conn.peer, data );
+				//console.log( "--PeerJS-- Received from " + conn.peer, data );
 
 				Zone._handleUpdate( data, conn );
 			});
@@ -163,6 +162,8 @@
 
 				conn.on( 'close', function()
 				{
+					delete Zone.characters[ peerID ];
+					
 					console.log( "--PeerJS-- active disconnected", peerID );
 				});
 
