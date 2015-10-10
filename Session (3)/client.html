@@ -49,6 +49,11 @@
 					onOpen();
 				});
 
+				conn.on( 'close', function()
+				{
+					console.log( "--PeerJS-- active disconnected", peerID );
+				});
+
 				_handleData( conn );
 			}
 
