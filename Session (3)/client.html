@@ -87,6 +87,13 @@
 				{
 					case "newCharacter":
 
+						if( Zone.characters[ updateCommand.cid ] )
+						{
+							// i already know
+
+							return;
+						}
+
 						console.log( "--Zone-- New Character", updateCommand.cid );
 
 						new Character( updateCommand.cid );
