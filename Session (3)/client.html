@@ -85,7 +85,16 @@
 
 			_sendMyCharacterDataTo: function( peerObject )
 			{
-				peerObject.send( { cid: peer.id, c: "newCharacter" } );
+				peerObject.send(
+				{
+					cid: peer.id,
+					c: "newCharacter",
+					d:
+					{
+						x: Zone.characters[ peer.id ].x,
+						y: Zone.characters[ peer.id ].y
+					}
+				} );
 			},
 
 			_handleUpdate: function( updateCommand, sourcePeer )
@@ -103,7 +112,7 @@
 
 						console.log( "--Zone-- New Character", updateCommand.cid );
 
-						new Character( updateCommand.cid );
+						( new Character( updateCommand.cid ) ).moveInLayout( updateCommand.d.x, updateCommand.d.y );
 
 						if( sourcePeer )
 						{
