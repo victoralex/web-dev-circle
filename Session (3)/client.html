@@ -17,6 +17,16 @@
 				}
 			);
 
+		var _handleData = function( conn )
+		{
+			conn.on( 'data', function( data )
+			{
+				// Will print 'hi!'
+				//console.log( "--PeerJS-- Received", conn, data );
+				console.log( "--PeerJS-- Received from " + conn.peer, data );
+			});
+		}
+
 		//
 		// Handle the connection with the tracker
 		//
@@ -38,6 +48,8 @@
 
 					onOpen();
 				});
+
+				_handleData( conn );
 			}
 
 			var _discoverPeers = function()
@@ -106,12 +118,7 @@
 		{
 			console.log( "--PeerJS-- passive connected to", conn.peer );
 
-			conn.on( 'data', function( data )
-			{
-				// Will print 'hi!'
-				//console.log( "--PeerJS-- Received", conn, data );
-				console.log( "--PeerJS-- Received from " + conn.peer, data );
-			});
+			_handleData( conn );
 		});
 
 		//
