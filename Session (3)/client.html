@@ -280,7 +280,63 @@
 		// Initialize my character
 		//
 
-		new Character( peer.id );
+		var _myCharacter = new Character( peer.id );
+
+		document.body.onkeydown = function( e )
+		{
+			var _moveTimeout = null;
+
+			document.body.onkeyup = function()
+			{
+				clearTimeout( _moveTimeout );
+
+				document.body.onkeyup = function() { }
+			}
+
+			switch( e.keyCode )
+			{
+				case 38:
+
+					// up
+
+					_moveTimeout = setTimeout( function()
+					{
+						_myCharacter.moveInNetwork( _myCharacter.x, _myCharacter.y - 10 );	
+					}, 50 );
+
+				break;
+				case 40:
+
+					// down
+
+					_moveTimeout = setTimeout( function()
+					{
+						_myCharacter.moveInNetwork( _myCharacter.x, _myCharacter.y + 10 );
+					});
+
+				break;
+				case 37:
+
+					// left
+
+					_moveTimeout = setTimeout( function()
+					{
+						_myCharacter.moveInNetwork( _myCharacter.x - 10, _myCharacter.y );
+					});
+
+				break;
+				case 39:
+
+					// right
+
+					_moveTimeout = setTimeout( function()
+					{
+						_myCharacter.moveInNetwork( _myCharacter.x + 10, _myCharacter.y );
+					});
+					
+				break;
+			}
+		}
 
 	</script>
 
