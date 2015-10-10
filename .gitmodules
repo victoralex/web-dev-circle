@@ -1,3 +1,6 @@
 [submodule "Session (3)/peerjs"]
 	path = Session (3)/peerjs
 	url = https://github.com/peers/peerjs
+[submodule "Session (3)/jquery"]
+	path = Session (3)/jquery
+	url = https://github.com/jquery/jquery
