@@ -1,0 +1,8 @@
+Clone using git clone --recursive git://github.com/victoralex/web-dev-circle
+
+To start the peerJS server run `cd node_modules/peer/bin && ./peerjs --port 9000 --key peerjs --allow_discovery`
+
+Be sure to change the trackerIP, on line 14 in client.html from 192.168.105.40 to whatever your local network address is.
+From your browser open client.html
+
+On other machines (ideally, on the same network) open client.html and open the developer tools to watch for messages being transmitted peer to peer between each client.
