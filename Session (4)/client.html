@@ -1,0 +1,344 @@
+<html>
+<head>
+	<title>PeerJS Demo</title>
+
+	<script src="peerjs/dist/peer.min.js"></script>
+	<script src="jquery/dist/jquery.min.js"></script>
+
+	<style media="all">
+
+		.character
+		{
+			position: absolute;
+			width: 100px;
+			height: 100px;
+			top: 0px;
+			left: 0px;
+			background-color: #9f9f9f;
+			transition: top 100ms ease-out, left 100ms ease-in;
+		}
+
+	</style>
+
+</head>
+<body>
+
+	<script type="text/javascript">
+
+		var Character = function( characterID )
+		{
+			var _self = this;
+
+			this.x = null;
+			this.y = null;
+			this.cid = characterID;
+			this.domObject = document.createElement( "div" );
+
+			this.moveInLayout = function( x, y )
+			{
+				_self.x = x;
+				_self.y = y;
+
+				_self.domObject.style.left = _self.x + "px";
+				_self.domObject.style.top = _self.y + "px";
+			}
+
+			this.moveInNetwork = function( x, y )
+			{
+				Zone.broadcast( { cid: _self.cid, c: "move", d: { x: x, y: y } } );
+			}
+
+			this.remove = function()
+			{
+				delete Zone.characters[ this.cid ];
+
+				this.domObject.parentNode.removeChild( this.domObject );
+			}
+
+			// initialize
+
+			Zone.characters[ this.cid ] = this;
+
+			this.domObject.className = "character";
+			document.body.appendChild( this.domObject );
+		}
+
+		var Zone = {
+
+			characters: {},
+
+			broadcast: function( message )
+			{
+				for( var i in peer.connections )
+				{
+					peer.connections[ i ].forEach( function( connection )
+					{
+						if( !connection.open )
+						{
+							return;
+						}
+
+						connection.send( message );
+					})
+				}
+
+				// hack into the local received commands
+				Zone._handleUpdate( message, null );
+			},
+
+			_sendMyCharacterDataTo: function( peerObject )
+			{
+				peerObject.send(
+				{
+					cid: peer.id,
+					c: "newCharacter",
+					d:
+					{
+						x: Zone.characters[ peer.id ].x,
+						y: Zone.characters[ peer.id ].y
+					}
+				} );
+			},
+
+			_handleUpdate: function( updateCommand, sourcePeer )
+			{
+				switch( updateCommand.c )
+				{
+					case "newCharacter":
+
+						if( Zone.characters[ updateCommand.cid ] )
+						{
+							// i already know
+
+							console.error( "--Zone-- I know " + updateCommand.cid + " already" );
+
+							return;
+						}
+
+						console.log( "--Zone-- New Character", updateCommand.cid );
+
+						( new Character( updateCommand.cid ) ).moveInLayout( updateCommand.d.x, updateCommand.d.y );
+
+						if( sourcePeer )
+						{
+							Zone._sendMyCharacterDataTo( sourcePeer );
+						}
+
+					break;
+					case "move":
+
+						console.log( "--Zone-- Move", updateCommand.cid, updateCommand.d );
+						
+						Zone.characters[ updateCommand.cid ].moveInLayout( updateCommand.d.x, updateCommand.d.y );
+
+					break;
+					default:
+
+						console.error( "--Zone-- Unknown command", updateCommand );
+				}
+			}
+		}
+
+		var	trackerIP = '192.168.105.107',
+			peer = new Peer(
+				'victor',
+				{
+					host: trackerIP
+				}
+			);
+
+		var _handleData = function( conn )
+		{
+			conn.on( 'data', function( data )
+			{
+				// Will print 'hi!'
+				//console.log( "--PeerJS-- Received from " + conn.peer, data );
+
+				Zone._handleUpdate( data, conn );
+			});
+		}
+
+		//
+		// Handle the connection with the tracker
+		//
+
+		peer.on( "open", function( myID )
+		{
+			console.log( "--PeerJS-- My ID is", myID );
+
+			// handle the connection with one peer at a time
+			var _handleConnection = function( peerID, onOpen )
+			{
+				var conn = peer.connect( peerID );
+
+				conn.on( 'open', function()
+				{
+					console.log( "--PeerJS-- active connected to", peerID );
+
+					// add my own character
+					Zone._sendMyCharacterDataTo( conn );
+
+					onOpen();
+				});
+
+				conn.on( 'close', function()
+				{
+					Zone.characters[ peerID ].remove();
+
+					console.log( "--PeerJS-- active disconnected", peerID );
+				});
+
+				_handleData( conn );
+			}
+
+			var _discoverPeers = function()
+			{
+				$.get(
+					'http://' + trackerIP + ':9000/peerjs/peers',
+					function( response )
+					{
+						var _connectedPeersAmount = 0;
+
+						// remove myself from the peers list
+						response.splice( response.indexOf( myID ), 1 );
+
+						for(var i=0;i<response.length;i++)
+						{
+							if( typeof peer.connections[ response[ i ] ] == "undefined" )
+							{
+								continue;
+							}
+
+							//console.log( "--PeerJS-- removed " + response[ i ] + " from the peers queue" );
+
+							response.splice( i--, 1 );
+						}
+
+						if( response.length == 0 )
+						{
+							// re-iterate
+							setTimeout( _discoverPeers, 1000 );
+
+							return;
+						}
+
+						//
+						// we have peers in the queue
+						//
+						
+						response.forEach( function( peerID )
+						{
+							_handleConnection( peerID, function()
+							{
+								_connectedPeersAmount++;
+
+								if( _connectedPeersAmount < response.length )
+								{
+									return;
+								}
+
+								// re-iterate
+								setTimeout( _discoverPeers, 1000 );
+							} );
+						});
+					}
+				);
+			}
+
+			// connect to all the peers currently registered with the tracker
+			_discoverPeers();
+		});
+
+		//
+		// Handle incoming connections from other peers
+		//
+
+		peer.on( 'connection', function( conn )
+		{
+			console.log( "--PeerJS-- passive connected to", conn.peer );
+
+			conn.on( "close", function()
+			{
+				Zone.characters[ conn.peer ].remove();
+
+				console.log( "--PeerJS-- passive disconnected", conn.peer );
+			});
+
+			_handleData( conn );
+		});
+
+		//
+		// Handle disconnection from the tracker
+		//
+
+		peer.on( 'disconnected', function()
+		{
+			console.error( "--PeerJS-- Oops" );
+		});
+
+		//
+		// Initialize my character
+		//
+
+		var _myCharacter = new Character( peer.id );
+
+		document.body.onkeydown = function( e )
+		{
+			var _moveTimeout = null;
+
+			document.body.onkeyup = function()
+			{
+				clearTimeout( _moveTimeout );
+
+				document.body.onkeyup = function() { }
+			}
+
+			switch( e.keyCode )
+			{
+				case 38:
+
+					// up
+
+					_moveTimeout = setTimeout( function()
+					{
+						_myCharacter.moveInNetwork( _myCharacter.x, _myCharacter.y - 10 );	
+					}, 50 );
+
+				break;
+				case 40:
+
+					// down
+
+					_moveTimeout = setTimeout( function()
+					{
+						_myCharacter.moveInNetwork( _myCharacter.x, _myCharacter.y + 10 );
+					});
+
+				break;
+				case 37:
+
+					// left
+
+					_moveTimeout = setTimeout( function()
+					{
+						_myCharacter.moveInNetwork( _myCharacter.x - 10, _myCharacter.y );
+					});
+
+				break;
+				case 39:
+
+					// right
+
+					_moveTimeout = setTimeout( function()
+					{
+						_myCharacter.moveInNetwork( _myCharacter.x + 10, _myCharacter.y );
+					});
+					
+				break;
+			}
+		}
+
+	</script>
+
+</body>
+</html
