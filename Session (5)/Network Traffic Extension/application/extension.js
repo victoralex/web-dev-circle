@@ -74,6 +74,8 @@
 
 					console.log( "--Swarm-- New Member", updateCommand.mid );
 
+					new Member( updateCommand.mid );
+
 					if( sourcePeer )
 					{
 						Swarm._handshake( sourcePeer );
