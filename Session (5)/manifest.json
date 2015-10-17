@@ -1,0 +1,36 @@
+{
+  "name": "__MSG_extName__",
+  "description": "__MSG_extDescription__",
+  "version": "0.1",
+  "manifest_version": 2,
+  "default_locale": "en",
+  "app": {
+    "background": {
+      "scripts": [
+        "application/p2pStreamer.background.js",
+        "libraries/library.peer.min.js",
+        "libraries/library.jquery-2.1.1.min.js",
+        "libraries/library.URI.js",
+        "libraries/library.uuid.js"
+      ]
+    }
+  },
+  "icons": {
+    "16": "theme/icons/icon16x16_disabled.png",
+    "32": "theme/icons/icon16x16_disabled.png",
+    "48": "theme/icons/icon48x48_disabled.png",
+    "128": "theme/icons/icon128x128_disabled.png"
+  },
+  "sockets":
+  {
+    "tcp":
+    {
+      "connect" : "",
+      "listen": "",
+      "accept": ""
+    }
+  },
+  "permissions": [
+    { "socket": [ "tcp-connect", "tcp-listen" ] }
+  ]
+}

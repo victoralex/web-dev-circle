@@ -1,0 +1,10 @@
+{
+  "extName":  {
+    "message": "Obidos Server",
+    "description": "The extension name."
+  },
+  "extDescription": {
+    "message": "P2P Proxy to anonymize data streaming",
+    "description": "The extension description."
+  }
+}
