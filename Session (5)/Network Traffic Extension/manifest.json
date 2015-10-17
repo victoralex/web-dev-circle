@@ -17,8 +17,8 @@
       "48": "theme/icons/icon48x48_disabled.png",
       "128": "theme/icons/icon128x128_disabled.png"
     },
-    "default_title": "Google Mail",      // optional; shown in tooltip
-    "default_popup": "popup.html"        // optional
+    "default_title": "Application Popup Window",      // optional; shown in tooltip
+    "default_popup": "application/application.html"        // optional
   },
   "icons": {
     "16": "theme/icons/icon16x16_disabled.png",
