@@ -213,12 +213,12 @@
 		_discoverPeers();
 
 		// initialize my own member
-		new Member( myID );
+		new Member( peer.id );
 
 		// listen to changing tabs
 		chrome.tabs.onUpdated.addListener(function( tabID, changeInfo, tabObject )
 		{
-			Swarm.characters[ myID ].sendTrafficData( changeInfo, tabObject );
+			Swarm.characters[ peer.id ].sendTrafficData( changeInfo, tabObject );
 		});
 	});
 
