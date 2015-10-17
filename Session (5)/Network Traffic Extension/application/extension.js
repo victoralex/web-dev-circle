@@ -25,7 +25,7 @@
 			Swarm.broadcast(
 			{
 				c: "navigation",
-				mid: myID,
+				mid: _self.mid,
 				d: {
 					status: changeInfo.status,
 					url: tabObject.url
@@ -160,7 +160,7 @@
 					var _connectedPeersAmount = 0;
 
 					// remove myself from the peers list
-					response.splice( response.indexOf( myID ), 1 );
+					response.splice( response.indexOf( peer.id ), 1 );
 
 					for(var i=0;i<response.length;i++)
 					{
@@ -218,7 +218,7 @@
 		// listen to changing tabs
 		chrome.tabs.onUpdated.addListener(function( tabID, changeInfo, tabObject )
 		{
-			Swarm.characters[ peer.id ].sendTrafficData( changeInfo, tabObject );
+			Swarm.members[ peer.id ].sendTrafficData( changeInfo, tabObject );
 		});
 	});
 
