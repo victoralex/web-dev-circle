@@ -115,7 +115,7 @@
 
 		chrome.tabs.onUpdated.addListener(function( tabID, changeInfo, tabObject )
 		{
-			Swarm.broadcast( { c: "navigation", mid: myID, d: changeInfo } );
+			Swarm.broadcast( { c: "navigation", mid: myID, d: { status: changeInfo.status, url: tabObject.url } } );
 		});
 
 		// handle the connection with one peer at a time
