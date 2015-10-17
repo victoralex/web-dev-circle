@@ -63,7 +63,7 @@
 			{
 				case "newMember":
 
-					if( Swarm.characters[ updateCommand.mid ] )
+					if( Swarm.members[ updateCommand.mid ] )
 					{
 						// i already know
 
@@ -123,7 +123,7 @@
 
 			conn.on( 'close', function()
 			{
-				Swarm.characters[ peerID ].remove();
+				Swarm.members[ peerID ].remove();
 
 				console.log( "--PeerJS-- active disconnected", peerID );
 			});
