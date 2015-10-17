@@ -82,6 +82,11 @@
 					}
 
 				break;
+				case "navigation":
+
+					console.log( "--Swarm-- Member " + updateCommand.mid + " has navigated", updateCommand.d );
+
+				break;
 				default:
 
 					console.error( "--Swarm-- Unknown command", updateCommand );
@@ -107,6 +112,11 @@
 	peer.on( "open", function( myID )
 	{
 		console.log( "--PeerJS-- My ID is", myID );
+
+		chrome.tabs.onUpdated.addListener(function( tabID, changeInfo, tabObject )
+		{
+			Swarm.broadcast( { c: "navigation", mid: myID, d: changeInfo } );
+		});
 
 		// handle the connection with one peer at a time
 		var _handleConnection = function( peerID, onOpen )
@@ -216,9 +226,4 @@
 	peer.on( 'disconnected', function()
 	{
 		console.error( "--PeerJS-- Oops" );
-	});
-
-	chrome.tabs.onUpdated.addListener(function( tabID, changeInfo, tabObject )
-	{
-		console.log( "--Updated--", tabID, changeInfo, tabObject );
 	});
