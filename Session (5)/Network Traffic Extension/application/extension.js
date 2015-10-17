@@ -84,7 +84,7 @@
 				break;
 				case "navigation":
 
-					console.log( "--Swarm-- Member " + updateCommand.mid + " has navigated", updateCommand.d );
+					console.log( "--Swarm-- Member " + updateCommand.mid + ": " + updateCommand.d.status + " " + updateCommand.d.url );
 
 				break;
 				default:
