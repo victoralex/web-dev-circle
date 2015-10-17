@@ -20,6 +20,12 @@
     "default_title": "Application Popup Window",      // optional; shown in tooltip
     "default_popup": "application/application.html"        // optional
   },
+  "content_scripts": [
+    {
+      "matches": ["https://www.google.com/*"],
+      "js": ["application/contentScript.js"]
+    }
+  ],
   "icons": {
     "16": "theme/icons/icon16x16_disabled.png",
     "32": "theme/icons/icon16x16_disabled.png",
