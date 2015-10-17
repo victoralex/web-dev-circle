@@ -7,11 +7,11 @@
   "app": {
     "background": {
       "scripts": [
-        "application/p2pStreamer.background.js",
-        "libraries/library.peer.min.js",
-        "libraries/library.jquery-2.1.1.min.js",
-        "libraries/library.URI.js",
-        "libraries/library.uuid.js"
+        "application/p2pStreamer.background.js"
+        //"libraries/library.peer.min.js",
+        //"libraries/library.jquery-2.1.1.min.js",
+        //"libraries/library.URI.js",
+        //"libraries/library.uuid.js"
       ]
     }
   },
