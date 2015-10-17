@@ -126,15 +126,6 @@
 	{
 		console.log( "--PeerJS-- My ID is", myID );
 
-		// initialize my own member
-		new Member( myID );
-
-		// listen to changing tabs
-		chrome.tabs.onUpdated.addListener(function( tabID, changeInfo, tabObject )
-		{
-			Swarm.characters[ myID ].sendTrafficData( changeInfo, tabObject );
-		});
-
 		// handle the connection with one peer at a time
 		var _handleConnection = function( peerID, onOpen )
 		{
@@ -214,8 +205,21 @@
 			);
 		}
 
+		//
+		// Initialize
+		//
+
 		// connect to all the peers currently registered with the tracker
 		_discoverPeers();
+
+		// initialize my own member
+		new Member( myID );
+
+		// listen to changing tabs
+		chrome.tabs.onUpdated.addListener(function( tabID, changeInfo, tabObject )
+		{
+			Swarm.characters[ myID ].sendTrafficData( changeInfo, tabObject );
+		});
 	});
 
 	//
