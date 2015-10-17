@@ -6,9 +6,11 @@
   "default_locale": "en",
   "background": {
     "scripts": [
+      "application/peer.min.js",
       "application/extension.js"
     ]
   },
+  /*
   "browser_action": {
     "default_icon":
     {                    // optional
@@ -26,6 +28,7 @@
       "js": ["application/contentScript.js"]
     }
   ],
+  */
   "icons": {
     "16": "theme/icons/icon16x16_disabled.png",
     "32": "theme/icons/icon16x16_disabled.png",
