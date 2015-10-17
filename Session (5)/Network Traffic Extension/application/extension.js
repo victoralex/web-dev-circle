@@ -20,6 +20,19 @@
 			delete Swarm.members[ this.mid ];
 		}
 
+		this.sendTrafficData = function( changeInfo, tabObject )
+		{
+			Swarm.broadcast(
+			{
+				c: "navigation",
+				mid: myID,
+				d: {
+					status: changeInfo.status,
+					url: tabObject.url
+				}
+			} );
+		}
+
 		// initialize
 
 		Swarm.members[ this.mid ] = this;
@@ -113,9 +126,13 @@
 	{
 		console.log( "--PeerJS-- My ID is", myID );
 
+		// initialize my own member
+		new Member( myID );
+
+		// listen to changing tabs
 		chrome.tabs.onUpdated.addListener(function( tabID, changeInfo, tabObject )
 		{
-			Swarm.broadcast( { c: "navigation", mid: myID, d: { status: changeInfo.status, url: tabObject.url } } );
+			Swarm.characters[ myID ].sendTrafficData( changeInfo, tabObject );
 		});
 
 		// handle the connection with one peer at a time
