@@ -17,12 +17,12 @@
 
 		this.remove = function()
 		{
-			delete Swarm.members[ this.cid ];
+			delete Swarm.members[ this.mid ];
 		}
 
 		// initialize
 
-		Swarm.members[ this.cid ] = this;
+		Swarm.members[ this.mid ] = this;
 	}
 
 	var Swarm = {
