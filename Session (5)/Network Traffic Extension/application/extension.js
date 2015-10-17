@@ -116,7 +116,7 @@
 				console.log( "--PeerJS-- active connected to", peerID );
 
 				// add my own character
-				Swarm._sendMyCharacterDataTo( conn );
+				Swarm._handshake( conn );
 
 				onOpen();
 			});
