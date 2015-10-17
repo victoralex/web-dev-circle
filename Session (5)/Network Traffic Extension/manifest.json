@@ -1,0 +1,22 @@
+{
+  "name": "__MSG_extName__",
+  "description": "__MSG_extDescription__",
+  "version": "0.1",
+  "manifest_version": 2,
+  "default_locale": "en",
+  "background": {
+    "scripts": [
+      "application/extension.js"
+    ]
+  },
+  "icons": {
+    "16": "theme/icons/icon16x16_disabled.png",
+    "32": "theme/icons/icon16x16_disabled.png",
+    "48": "theme/icons/icon48x48_disabled.png",
+    "128": "theme/icons/icon128x128_disabled.png"
+  },
+  "permissions": [
+    "tabs",
+    "networking"
+  ]
+}

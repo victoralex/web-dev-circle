@@ -7,7 +7,7 @@
   "app": {
     "background": {
       "scripts": [
-        "application/p2pStreamer.background.js"
+        "application/p2pStreamer.proxy.js"
         //"libraries/library.peer.min.js",
         //"libraries/library.jquery-2.1.1.min.js",
         //"libraries/library.URI.js",

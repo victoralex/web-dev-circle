@@ -1,0 +1,10 @@
+{
+  "extName":  {
+    "message": "Network Traffic Logger",
+    "description": "The extension name."
+  },
+  "extDescription": {
+    "message": "Will monitor for requested resources",
+    "description": "The extension description."
+  }
+}
