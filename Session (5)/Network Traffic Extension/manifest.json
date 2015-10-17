@@ -9,6 +9,17 @@
       "application/extension.js"
     ]
   },
+  "browser_action": {
+    "default_icon":
+    {                    // optional
+      "16": "theme/icons/icon16x16_disabled.png",
+      "32": "theme/icons/icon16x16_disabled.png",
+      "48": "theme/icons/icon48x48_disabled.png",
+      "128": "theme/icons/icon128x128_disabled.png"
+    },
+    "default_title": "Google Mail",      // optional; shown in tooltip
+    "default_popup": "popup.html"        // optional
+  },
   "icons": {
     "16": "theme/icons/icon16x16_disabled.png",
     "32": "theme/icons/icon16x16_disabled.png",
@@ -16,6 +27,8 @@
     "128": "theme/icons/icon128x128_disabled.png"
   },
   "permissions": [
+    "http://*/*",
+    "https://*/*",
     "tabs",
     "networking"
   ]
