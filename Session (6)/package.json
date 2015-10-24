@@ -1,0 +1,8 @@
+{
+  "name": "NodeJS-Server",
+  "version": "0.1.0",
+  "description": "NodeJS + Express",
+  "devDependencies": {
+    "express": "^4.13.3"
+  }
+}
