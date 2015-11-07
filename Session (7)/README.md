@@ -1,4 +1,4 @@
-# Cloud Zeitgeist
+# Cloud Zeitgeist no 1
 We wanted to build an automated way to process pictures into thumbnails, average screen size and conversion to a 3rd party format, using no programming code, but just Bash, command-line tools, and AWS. We've covered most of this excercise in the following manner:
 
 # AWS
